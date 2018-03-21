@@ -55,9 +55,125 @@ void ver_fila(FILA *front){
 	}
 }
 
+
+// Funções de Lista:
 //-----------------Insert-List--------------------
+LISTA * insert_list(LISTA * head){
+	LISTA * cur=head;
+	LISTA * new = NULL;
 
+	new=(LISTA*)malloc(sizeof(LISTA));
+	if(new==NULL){
+		puts("Tivemos um problema ao alocar a memoria");
+		exit(0);
+	}
 
+	new->next=NULL;
+
+	if(cur->next==NULL){
+		cur->next=new;
+	}else{
+		while(cur->next!=NULL){
+			cur=cur->next;
+		}
+		cur->next=new;
+	}
+
+	return head;
+
+}
+//------------------------------------------------
+
+//-----------------Remove-List--------------------
+LISTA *remove_list(LISTA *head){
+	LISTA *old = NULL;
+	LISTA *last_old = NULL;
+	int rola = 0;
+
+	last_old = head;
+	old = head->next;
+
+	while (old != NULL && !rola){
+		if (!strcmp(old->nome_da_musica, song)){
+			rola = 1;
+		}else{
+			last_old = old;
+			old = old->next;
+		}
+	}
+
+	if (old != NULL){
+		last_old->next = old->next;
+		free(old);
+	}
+
+	return head;
+}
+//--------------------------------------------
+
+//Funções de Fila:
+//------------------Enqueue-------------------
+FILA *enqueue(FILA *rear, FILA *front){
+	FILA *new = NULL;
+
+	new = (FILA *)malloc(sizeof(FILA));
+	if (new == NULL){
+		puts("Tivemos problema ao adicionar um elemento na fila");
+		exit(1);
+	}
+
+	new->next = NULL;
+
+	rear->next = new;
+
+	return new;
+}
+
+//--------------------------------------------
+
+//------------Enqueue-Front-------------------
+FILA *enqueue_front(FILA *rear){
+
+	FILA *new = NULL;
+	FILA *cur = NULL;
+
+	cur = rear;
+
+	new = (FILA *)malloc(sizeof(FILA));
+	if (new == NULL){
+		puts("Tivemos problema ao adicionar um elemento na fila");
+		exit(1);
+	}
+
+	new->next = NULL;
+
+	cur->next = new;
+
+	return new;
+}
+//--------------------------------------------
+
+//------------Empty-Queue-------------------
+FILA *empty_queue(FILA *front, FILA **rear){
+	FILA *old = NULL;
+	FILA *last_old = NULL;
+
+	last_old = front;
+	old = front->next;
+
+	while (old != NULL){
+		last_old = old;
+		old = old->next;
+		free(last_old);
+	}
+
+	front->next = NULL;
+
+	(*(rear)) = front;
+
+	return front;
+}
+//-------------------------------------------
 
 //Ordenação:
 //----------------Insertion---------------------
