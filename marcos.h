@@ -8,7 +8,7 @@
 //------------------Estrutura---------------------
 typedef struct Lista{
 
-	 //Valores ; 
+	 //Valores; 
 
 	struct Lista *next;
 
@@ -16,12 +16,20 @@ typedef struct Lista{
 
 typedef struct Playlist{
 
-	//Valores ;
+	//Valores;
 
 	LISTA *album;
 	struct Playlist *next;
 
 } PLAYLIST;
+
+
+typedef struct Fila{
+	
+	//Valores;
+
+	struct Fila * next;
+}FILA;
 
 //---------------------Debug----------------------
 void ver_playlist(PLAYLIST *meus_albuns){
@@ -94,7 +102,7 @@ LISTA *remove_list(LISTA *head){
 	old = head->next;
 
 	while (old != NULL && !rola){
-		if (!strcmp(old->nome_da_musica, song)){
+		if (1){//comparação para achar
 			rola = 1;
 		}else{
 			last_old = old;
@@ -281,6 +289,58 @@ void merge_sort(int * array ,int inicio, int parada){//indice dos elementos
 
 	}
 
+
+}
+//------------------------------------------
+//--------------Bubble-Sort-----------------
+
+void bubble_sort(int * vetor,int tam ){
+	int i,j;
+
+	do{
+	 	j=0;
+
+		for(i=0;i<tam-2;i++){
+
+			if(vetor[i]>vetor[i+1]){
+				int aux;
+				aux=vetor[i];
+				vetor[i]=vetor[i+1];
+				vetor[i+1]=aux;
+
+				j=1;
+			}
+
+		}
+
+	}while(j);
+
+
+}
+
+//------------------------------------------
+
+//Busca:
+//--------------Binary-Search---------------
+int binary_search(int * vector,int key, int tam){
+	int inicio=0;
+	int fim=tam-1;
+	int meio;
+
+	do{
+		meio=floor((fim+inicio)/2);
+
+		if(vector[meio]==key){
+			return meio;
+		}else if(vector[meio]<key){
+			inicio=meio+1;
+		}else{
+			fim=meio-1;
+		}
+
+	}while(inicio<=fim);
+
+	return -1;
 
 }
 //------------------------------------------
