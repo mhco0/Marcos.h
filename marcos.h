@@ -34,7 +34,7 @@ typedef struct Fila{
 
 
 typedef struct Tree{
-	//Valores;
+	int val;
 	struct Tree * left;
 	struct Tree * right;
 }TREE;
@@ -190,6 +190,48 @@ FILA *empty_queue(FILA *front, FILA **rear){
 	return front;
 }
 //-------------------------------------------
+
+
+//Funções de arvore:
+//-----------------New-Node---------------------
+TREE * new_node(int val){
+	TREE * node =(TREE * ) malloc(sizeof(TREE));
+
+	node->val=val;
+
+	node->left=NULL;
+
+	node->right=NULL;
+
+	return node ;
+}
+//----------------------------------------------
+
+//----------------Insert-Node------------------
+TREE * insert_node(TREE * root , int val){
+	if(root==NULL){
+		root=new_node(val);
+	}else if(val>root->val){
+		root->right=insert_node(root->right,val);
+	}else{
+		root->left=insert_node(root->left,val);
+	}
+	return root;
+}
+//---------------------------------------------
+
+//-----------------Show-Tree-------------------
+void show_tree(TREE * root){
+
+	if(root==NULL){
+		return ;
+	}else{
+		show_root(root->left);
+		printf("%d\n",root->val );
+		show_root(root->right);
+	}
+}
+//----------------------------------------------
 
 //Ordenação:
 //----------------Insertion---------------------
