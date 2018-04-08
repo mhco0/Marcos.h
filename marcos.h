@@ -2,6 +2,7 @@
 #include <stdio.h>	
 #include <stdlib.h>
 #include <math.h> //-lm
+#include <time.h>
 
 
 //Listas:
@@ -30,6 +31,13 @@ typedef struct Fila{
 
 	struct Fila * next;
 }FILA;
+
+
+typedef struct Tree{
+	//Valores;
+	struct Tree * left;
+	struct Tree * right;
+}TREE;
 
 //---------------------Debug----------------------
 void ver_playlist(PLAYLIST *meus_albuns){
@@ -201,95 +209,117 @@ void insertion_sort(int * vet , int tam){
 		vet[j+1]=var;
 
 	}
-
-
 }
 //----------------------------------------------
 
 //-----------------Merge------------------------
-void merge(int * array,int inicio,int meio,int fim){
-	int * esquerda=NULL;
-	int * direita=NULL;
+void merge(int * vector, int left , int right , int * aux){
+	int i,j,k;
+	int mid;
 
-	int tam_esq=(meio-inicio+1);
-	int tam_dir=(fim-meio);
-
-	int i,j,k,l;
-	int maior=0;
-
-	for(l=inicio;l<=fim;l++){
-		if(l==0){
-			maior=array[l];
-		}
-
-		if(array[l]>maior){
-			maior=array[l];
-		}
+	for(i=left;i<=right;i++){
+		aux[i]=vector[i];
 	}
 
-	esquerda=(int*)malloc((tam_esq+1)*sizeof(int));
-	if(esquerda==NULL){
+	mid=floor((left+right)/2);
 
-		puts("tivemos um erro ao alocar espaco na memoria");
-		exit(0);
+	i=left;
+	j=mid+1;
 
-	}
-
-	direita=(int*)malloc((tam_dir+1)*sizeof(int));
-	if(direita==NULL){
-
-		free(esquerda);
-
-		puts("tivemos um erro ao alocar espaco na memoria");
-		exit(0);
-
-	}
-
-	for(i=0;i<tam_esq;i++){
-		esquerda[i]=array[inicio+i];
-	}
-
-	for(j=0;j<tam_dir;j++){
-		direita[j]=array[meio+j+1];
-	}
-
-
-	esquerda[tam_esq]=maior;
-	direita[tam_dir]=maior;
-
-	i=0;
-	j=0;
-
-	for(k=inicio;k<=fim;k++){
-		if(esquerda[i]<=direita[j]){
-			array[k]=esquerda[i];
+	for(k=left;k<=right;k++){
+		if(j>right){
+			vector[k]=aux[i];
+			i++;
+		}else if(i>mid){
+			vector[k]=aux[j];
+			j++;
+		}else if(aux[i]<aux[j]){
+			vector[k]=aux[i];
 			i++;
 		}else{
-			array[k]=direita[j];
+			vector[k]=aux[j];
 			j++;
 		}
 	}
+}
 
-	free(esquerda);
-	free(direita);
+void msort(int * vector , int left , int right,int *aux){
+
+	if(left!=right){
+		int mid;
+
+		mid=floor((left+right)/2);
+
+		msort(vector,left,mid,aux);
+		msort(vector,mid+1,right,aux);
+		merge(vector,left,right,aux);
+			
+	}
+}
+
+void merge_sort(int *vector,int left , int right){
+	int * aux=NULL;
+
+	aux=(int * )malloc((right+1)*sizeof(int));
+
+	msort(vector,left,right,aux);
+
+	free(aux);
+}
+//------------------------------------------
+//---------------Quick-Sort-----------------
+int particion(int * vector, int left , int right){
+	int i,j;
+	int aux;
+
+	i=left;
+	j=right;
+
+	while(i<j){
+		while (i<=right && vector[i]<=vector[left]){
+			i++;
+		}
+		while(vector[j]>vector[left]){
+			j--;
+		}
+
+		if(i<j){
+			aux=vector[i];
+			vector[i]=vector[j];
+			vector[j]=aux;
+		}
+
+	}	
+	
+	aux=vector[left];
+	vector[left]=vector[j];
+	vector[j]=aux;
+	
+	return j;
 
 }
 
+void q_sort(int * vector , int left,int right){
+	int mid;
 
-void merge_sort(int * array ,int inicio, int parada){//indice dos elementos
-
-	int meio;
-
-	if(inicio < parada){
-		meio=floor(((inicio+parada)/2));
-
-		merge_sort(array,inicio,meio);
-		merge_sort(array,meio+1,parada);
-		merge(array,inicio,meio,parada);
-
+	if(left<right){
+		mid=particion(vector,left,right);
+		q_sort(vector,left,mid-1);
+		q_sort(vector,mid+1,right);
 	}
+}
 
+void quick_sort(int * vector, int left, int right){
+	int aux,pivo;
+	srand(time(NULL));
 
+	pivo=rand()%right;
+
+	aux=vector[pivo];
+	vector[pivo]=vector[left];
+	vector[left]=aux;
+	
+	q_sort(vector,left,right);
 }
 //------------------------------------------
 //--------------Bubble-Sort-----------------
