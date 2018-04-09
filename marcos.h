@@ -196,6 +196,10 @@ FILA *empty_queue(FILA *front, FILA **rear){
 //-----------------New-Node---------------------
 TREE * new_node(int val){
 	TREE * node =(TREE * ) malloc(sizeof(TREE));
+	if(node==NULL){
+		puts("Erro ao alocar o node");
+		exit(0);
+	}
 
 	node->val=val;
 
@@ -210,13 +214,14 @@ TREE * new_node(int val){
 //----------------Insert-Node------------------
 TREE * insert_node(TREE * root , int val){
 	if(root==NULL){
-		root=new_node(val);
+		return new_node(val);
 	}else if(val>root->val){
 		root->right=insert_node(root->right,val);
+		return root;
 	}else{
 		root->left=insert_node(root->left,val);
+		return root;
 	}
-	return root;
 }
 //---------------------------------------------
 
@@ -226,13 +231,32 @@ void show_tree(TREE * root){
 	if(root==NULL){
 		return ;
 	}else{
-		show_root(root->left);
-		printf("%d\n",root->val );
-		show_root(root->right);
+		show_tree(root->left);
+		printf("%d\n",root->val);
+		show_tree(root->right);
 	}
 }
 //----------------------------------------------
+//----------------Search-Tree-------------------
 
+TREE * search_tree(TREE * root,int val){
+
+	if(root==NULL){
+		return NULL;
+	}
+
+	if(root->val==val){
+		return root;
+	}else if(root->val<val){
+		return search_tree(root->right,val);
+	}else{
+		return search_tree(root->left,val);
+	}
+
+
+}
+
+//---------------------------------------------
 //Ordenação:
 //----------------Insertion---------------------
 void insertion_sort(int * vet , int tam){

@@ -2,22 +2,26 @@
 
 int main(void){
 
-	int vetor[10]={5,6,7,3,2,1,9,0,4,8};
+	TREE * root=NULL;
+	TREE * temp=NULL;
 	int i;
 
+
 	for(i=0;i<10;i++){
-		printf("%d\n",vetor[i] );
+		root=insert_node(root,i);
 	}
 
 
-	quick_sort(vetor,0,9);
-	//merge_sort(vetor,0,9);
+	show_tree(root);
 
 
-	printf("\n");
-	for(i=0;i<10;i++){
-		printf("%d\n",vetor[i] );
+	temp=search_tree(root , 10);
+	if(temp==NULL){
+		puts("nao ta na arvore");
+	}else{
+		printf("%d\n",temp->val );
 	}
+
 
 }
 
